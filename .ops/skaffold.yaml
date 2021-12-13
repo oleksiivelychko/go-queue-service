@@ -1,0 +1,13 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: go-queue-service
+build:
+  artifacts:
+  - image: go-service
+    docker:
+      dockerfile: .ops/Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - .ops/k8s.yaml
