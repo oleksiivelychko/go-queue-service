@@ -1,0 +1,2 @@
+go_queue:
+  replicaCount: 1
