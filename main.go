@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
-	fmt.Println("go-queue-service")
-	time.Sleep(time.Second * 1)
+	for {
+		fmt.Println("Hello Skaffold!")
+		time.Sleep(time.Second * 1)
+	}
 }
