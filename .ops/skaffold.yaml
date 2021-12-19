@@ -1,13 +1,32 @@
 apiVersion: skaffold/v2beta26
 kind: Config
+
 metadata:
-  name: go-queue-service
+  name: ops
+
 build:
   artifacts:
   - image: go-service
     docker:
-      dockerfile: .ops/Dockerfile
+      dockerfile: .ops/docker/Dockerfile
+
 deploy:
+  helm:
+    releases:
+      - name: rabbitmq
+        remoteChart: bitnami/rabbitmq
+        version: 8.24.12 # chart version
+        valuesFiles:
+          - .ops/helm/values/rabbitmq.yaml
+        namespace: go-service
+        createNamespace: true
   kubectl:
     manifests:
-    - .ops/k8s.yaml
+    - .ops/k8s/go-queue-service.yaml
+
+portForward:
+  - resourceType: service
+    resourceName: rabbitmq
+    namespace: go-service
+    port: 15672 # rabbitmq management console port
+    localPort: 15672
