@@ -5,4 +5,9 @@
 Install development dependencies:
 ```
 brew install skaffold
+brew install helm
+```
+Prepare development:
+```
+helm repo update
 ```
