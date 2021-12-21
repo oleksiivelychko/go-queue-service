@@ -6,6 +6,7 @@ Install development dependencies:
 ```
 brew install skaffold
 brew install helm
+brew install k9s
 ```
 Prepare development:
 ```
