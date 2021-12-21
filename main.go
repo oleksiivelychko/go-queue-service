@@ -1,13 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"time"
+	"io"
+	"log"
+	"net/http"
 )
 
 func main() {
-	for {
-		fmt.Println("Hello Skaffold!")
-		time.Sleep(time.Second * 1)
+	helloHandler := func(w http.ResponseWriter, req *http.Request) {
+		_, _ = io.WriteString(w, "Hello, Skaffold!")
 	}
+	http.HandleFunc("/hello", helloHandler)
+	log.Fatal(http.ListenAndServe(":80", nil))
 }
