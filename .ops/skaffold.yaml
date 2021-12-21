@@ -30,3 +30,8 @@ portForward:
     namespace: go-service
     port: 15672 # rabbitmq management console port
     localPort: 15672
+  - resourceType: pod
+    resourceName: go-queue-service
+    namespace: go-service
+    port: 80
+    localPort: 8080
