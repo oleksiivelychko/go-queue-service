@@ -22,7 +22,7 @@ deploy:
         createNamespace: true
   kubectl:
     manifests:
-    - .ops/k8s/go-queue-service.yaml
+    - .ops/k8s/*.yaml
 
 portForward:
   - resourceType: service
