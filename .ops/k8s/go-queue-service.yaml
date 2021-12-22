@@ -1,3 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-queue-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-queue-service
+  template:
+    metadata:
+      labels:
+        app: go-queue-service
+    spec:
+      containers:
+        - name: go-queue-service
+          image: go-service
+---
 apiVersion: v1
 kind: Pod
 metadata:
