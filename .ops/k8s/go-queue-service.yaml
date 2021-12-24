@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: go-queue-service
+  namespace: go-ns
 spec:
   replicas: 1
   selector:
@@ -20,7 +21,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: go-queue-service
-  namespace: go-service
+  namespace: go-ns
 spec:
   containers:
     - name: go-queue-service

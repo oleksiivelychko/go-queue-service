@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	log.Println("starting server...")
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		_, _ = io.WriteString(w, "Hello, Skaffold!")
 	})

@@ -18,7 +18,7 @@ deploy:
         version: 8.24.12
         valuesFiles:
           - .ops/helm/values/rabbitmq.yaml
-        namespace: go-service
+        namespace: go-ns
         createNamespace: true
   kubectl:
     manifests:
@@ -27,11 +27,11 @@ deploy:
 portForward:
   - resourceType: service
     resourceName: rabbitmq
-    namespace: go-service
+    namespace: go-ns
     port: 15672 # rabbitmq management console port
     localPort: 15672
   - resourceType: pod
     resourceName: go-queue-service
-    namespace: go-service
+    namespace: go-ns
     port: 80
     localPort: 8080
