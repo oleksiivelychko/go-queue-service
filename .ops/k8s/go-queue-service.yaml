@@ -1,28 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: go-queue-service
+  name: go-queue
   namespace: go-ns
+  labels:
+    app: go-queue-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-queue-service
+      app: go-queue-app
   template:
     metadata:
       labels:
-        app: go-queue-service
+        app: go-queue-app
     spec:
       containers:
         - name: go-queue-service
           image: go-service
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
 ---
 apiVersion: v1
-kind: Pod
+kind: Service
 metadata:
   name: go-queue-service
   namespace: go-ns
+  labels:
+    app: go-queue-app
 spec:
-  containers:
-    - name: go-queue-service
-      image: go-service
+  selector:
+    app: go-queue-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+
