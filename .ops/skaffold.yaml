@@ -6,9 +6,9 @@ metadata:
 
 build:
   artifacts:
-  - image: go-service
-    docker:
-      dockerfile: .ops/docker/Dockerfile
+    - image: go-service
+      docker:
+        dockerfile: .ops/docker/Dockerfile
 
 deploy:
   helm:
@@ -28,10 +28,10 @@ portForward:
   - resourceType: service
     resourceName: rabbitmq
     namespace: go-ns
-    port: 15672 # rabbitmq management console port
+    port: 15672
     localPort: 15672
-  - resourceType: pod
+  - resourceType: service
     resourceName: go-queue-service
     namespace: go-ns
-    port: 80
+    port: 8080
     localPort: 8080
