@@ -18,6 +18,13 @@ spec:
       containers:
         - name: go-queue-service
           image: go-service
+          ports:
+            - containerPort: 8080
+              name: http-server
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
 ---
 apiVersion: v1
 kind: Service
@@ -27,13 +34,17 @@ metadata:
   labels:
     app: go-queue-app
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: go-queue-app
   ports:
     - name: http
       protocol: TCP
       port: 8080
-      targetPort: 8080
+      targetPort: http-server
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: http-server
 
 
