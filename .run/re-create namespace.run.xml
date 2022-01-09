@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="delete secret" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="kubectl delete secret go-queue-service-tls" />
+  <configuration default="false" name="re-create namespace" type="ShConfigurationType">
+    <option name="SCRIPT_TEXT" value="kubectl delete ns go-ns &amp;&amp; kubectl create namespace go-ns" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
