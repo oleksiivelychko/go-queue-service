@@ -1,41 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: go-queue
+  name: go-queue-app
   namespace: go-ns
-  labels:
-    app: go-queue-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-queue-app
+      run: go-queue-app
   template:
     metadata:
       labels:
-        app: go-queue-app
+        run: go-queue-app
     spec:
       containers:
-        - name: go-queue-service
-          image: go-service
-          ports:
-            - containerPort: 8080
-          resources:
-            limits:
-              cpu: "1"
-              memory: "1Gi"
+      - name: go-queue-service
+        image: go-service
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-queue-service
+  name: go-queue-app
   namespace: go-ns
   labels:
-    app: go-queue-app
+    run: go-queue-app
 spec:
   type: ClusterIP
   selector:
-    app: go-queue-app
+    run: go-queue-app
   ports:
     - name: http
       protocol: TCP
