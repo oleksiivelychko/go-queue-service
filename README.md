@@ -16,9 +16,13 @@ helm upgrade --install ingress-nginx ingress-nginx \
   --namespace ingress-nginx --create-namespace
 ```
 
-Create/delete secret:
-```
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout .ops/certs/openssl.key -out .ops/certs/openssl.crt -subj "/CN=go-queue-service.local/O=go-queue-service.local"
-kubectl create secret tls go-queue-service-tls --key .ops/certs/openssl.key --cert .ops/certs/openssl.crt
-kubectl delete secret go-queue-service-tls
+Create secret:
+``` 
+
+openssl req -x509 -out .ops/certs/localhost.crt -keyout .ops/certs/localhost.key \
+  -newkey rsa:2048 -nodes -sha256 \
+  -subj '/CN=go-queue-service.local' -extensions EXT -config <( \
+   printf "[dn]\nCN=go-queue-service.local\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:go-queue-service.local\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+
+kubectl create secret tls go-queue-service-secret-tls --key .ops/certs/localhost.key --cert .ops/certs/localhost.crt --namespace=go-ns
 ```
