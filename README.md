@@ -9,6 +9,12 @@ brew install helm
 brew install k9s
 ```
 
+Install k8s metric server:
+```
+curl -Lo .ops/k9s/metrics-server.yaml https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl apply -f .ops/k9s/metrics-server.yaml
+```
+
 Deploy Ingress controller:
 ```
 helm upgrade --install ingress-nginx ingress-nginx \
