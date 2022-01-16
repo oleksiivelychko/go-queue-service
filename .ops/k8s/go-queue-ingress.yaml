@@ -2,29 +2,35 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: go-queue-ingress
+  namespace: go-ns
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-body-size: "512m"
 spec:
   tls:
-    - secretName: go-queue-service-tls
-      hosts:
-        - go-queue-service.local
+  - hosts:
+    - go-queue-service.local
+    secretName: go-queue-service-secret-tls
   rules:
-    - host: go-queue-service.local
-    - http:
-        paths:
-          - pathType: ImplementationSpecific
-            path: /
-            backend:
-              service:
-                name: go-queue-service
-                port:
-                  number: 8080
-          - path: /rmq
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: rabbitmq
-                port:
-                  number: 15672
-
+  - host: go-queue-service.local
+    http:
+      paths:
+      - path: /(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: go-queue-app
+            port:
+              number: 8080
+      - path: /rmq/(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: rabbitmq
+            port:
+              number: 15672
