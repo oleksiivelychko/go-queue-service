@@ -22,3 +22,10 @@ deploy:
   kubectl:
     manifests:
     - .ops/k8s/*.yaml
+
+portForward:
+  - resourceType: service
+    resourceName: rabbitmq
+    namespace: go-ns
+    port: 5672
+    localPort: 5672
