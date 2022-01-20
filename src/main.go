@@ -1,18 +1,22 @@
 package main
 
 import (
+	"github.com/oleksiivelychko/go-queue-service/initmq"
 	"io"
 	"log"
 	"net/http"
 )
 
 func main() {
-	log.Println("starting server...")
-	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+	initmq.LoadEnv()
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.WriteString(w, "It's Skaffold!\n")
 	})
-	http.HandleFunc("/hello/", func(w http.ResponseWriter, req *http.Request) {
-		_, _ = io.WriteString(w, "Hello Skaffold!\n")
+	http.HandleFunc("/queue/", func(w http.ResponseWriter, r *http.Request) {
+		SendMessageIntoQueue(w, r)
 	})
+
+	log.Println("starting server...")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
