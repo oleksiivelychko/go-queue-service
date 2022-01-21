@@ -6,19 +6,19 @@ metadata:
 
 build:
   artifacts:
-    - image: go-service
+    - image: go-queue
       docker:
         dockerfile: .ops/docker/Dockerfile
 
 deploy:
   helm:
     releases:
-      - name: rabbitmq
-        remoteChart: bitnami/rabbitmq
-        version: 8.18.1
-        valuesFiles:
-          - .ops/helm/values/rabbitmq.yaml
-        namespace: go-ns
+    - name: rabbitmq
+      remoteChart: bitnami/rabbitmq
+      version: 8.18.1
+      valuesFiles:
+        - .ops/helm/values/rabbitmq.yaml
+      namespace: go-ns
   kubectl:
     manifests:
     - .ops/k8s/*.yaml
