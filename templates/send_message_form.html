@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send message form</title>
+</head>
+<body>
+    {{if .Success}}
+        <h1>Message was sent to into queue.</h1>
+    {{else}}
+        <h5>Send message into queue:</h5>
+        <form method="POST">
+            <label>Message:</label><br />
+            <textarea name="message"></textarea><br />
+            <input type="submit">
+        </form>
+    {{end}}
+</body>
+</html>

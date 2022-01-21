@@ -5,7 +5,7 @@ FROM golang:1.17-alpine as builder
 ENV CGO_ENABLED 0
 
 WORKDIR /
-COPY src/* /
+COPY / /
 
 # `skaffold debug` sets SKAFFOLD_GO_GCFLAGS to disable compiler optimizations
 ARG SKAFFOLD_GO_GCFLAGS
