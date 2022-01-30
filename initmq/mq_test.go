@@ -5,7 +5,7 @@ import (
 )
 
 func TestMQConnection(t *testing.T) {
-	LoadEnv()
+	LoadEnv("go-queue-service.local")
 
 	_, err := MQ()
 	if err != nil {
@@ -14,7 +14,7 @@ func TestMQConnection(t *testing.T) {
 }
 
 func TestMakeQueue(t *testing.T) {
-	LoadEnv()
+	LoadEnv("go-queue-service.local")
 
 	conn, _ := MQ()
 	ch, err := conn.Channel()
