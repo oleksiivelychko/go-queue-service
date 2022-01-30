@@ -1,14 +1,21 @@
 package main
 
 import (
+	"embed"
 	"github.com/oleksiivelychko/go-queue-service/initmq"
 	"github.com/streadway/amqp"
 	"html/template"
 	"io"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
+)
+
+var (
+	//go:embed templates
+	embedTemplates embed.FS
+	pages          = map[string]string{
+		"/queue/": "templates/send_message_form.html",
+	}
 )
 
 func failOnError(err error, msg string) {
@@ -23,25 +30,40 @@ type Form struct {
 }
 
 func main() {
-	initmq.LoadEnv()
+	initmq.LoadEnv("rabbitmq")
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.WriteString(w, "It's Skaffold!\n")
 	})
+
 	http.HandleFunc("/queue/", func(w http.ResponseWriter, r *http.Request) {
-		wd, err := os.Getwd()
-		if err != nil {
-			log.Fatal(err)
+		page, ok := pages[r.URL.Path]
+		if !ok {
+			log.Printf("URL path %s not found", r.URL.Path)
+			w.WriteHeader(http.StatusNotFound)
+			return
 		}
-		tmpl := template.Must(template.ParseFiles(filepath.Join(wd, "./templates/send_message_form.html")))
+
+		tpl, err := template.ParseFS(embedTemplates, page)
+		if err != nil {
+			log.Printf("page %s not found", r.RequestURI)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/html")
+		w.WriteHeader(http.StatusOK)
 
 		form := Form{
 			Message: r.FormValue("message"),
 		}
 
-		if r.Method != http.MethodPost {
-			form.Success = false
-			_ = tmpl.Execute(w, form)
+		form.Success = false
+		if r.Method == http.MethodPost {
+			form.Success = true
+		}
+
+		if err = tpl.Execute(w, form); err != nil {
 			return
 		}
 
@@ -65,12 +87,12 @@ func main() {
 				ContentType: "text/plain",
 				Body:        []byte(form.Message),
 			})
+
 		failOnError(err, "Failed to publish a message")
 		log.Printf(" [x] Sent %s\n", form.Message)
-
-		form.Success = false
-		_ = tmpl.Execute(w, form)
 	})
+
+	http.FileServer(http.FS(embedTemplates))
 
 	log.Println("starting server...")
 	log.Fatal(http.ListenAndServe(":8080", nil))
