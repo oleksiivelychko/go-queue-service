@@ -3,6 +3,7 @@ package initmq
 import (
 	"fmt"
 	"github.com/streadway/amqp"
+	"log"
 )
 
 func Connection(host, user, pass, port string) (conn *amqp.Connection, err error) {
@@ -20,4 +21,10 @@ func MakeQueue(ch *amqp.Channel, name string) (amqp.Queue, error) {
 		false, // no-wait
 		nil,   // arguments
 	)
+}
+
+func FailOnError(err error, msg string) {
+	if err != nil {
+		log.Panicf("%s: %s", msg, err)
+	}
 }
