@@ -18,15 +18,9 @@ var (
 	}
 )
 
-func failOnError(err error, msg string) {
-	if err != nil {
-		log.Panicf("%s: %s", msg, err)
-	}
-}
-
 type Form struct {
 	Message string
-	Success bool
+	Sent    bool
 }
 
 func main() {
@@ -56,11 +50,7 @@ func main() {
 
 		form := Form{
 			Message: r.FormValue("message"),
-		}
-
-		form.Success = false
-		if r.Method == http.MethodPost {
-			form.Success = true
+			Sent:    false,
 		}
 
 		if err = tpl.Execute(w, form); err != nil {
@@ -68,28 +58,32 @@ func main() {
 		}
 
 		conn, err := initmq.MQ()
-		failOnError(err, "Failed to connect to RabbitMQ")
+		initmq.FailOnError(err, "Failed to connect to RabbitMQ")
 		defer conn.Close()
 
 		ch, err := conn.Channel()
-		failOnError(err, "Failed to open a channel")
+		initmq.FailOnError(err, "Failed to open a channel")
 		defer ch.Close()
 
 		q, err := initmq.MakeQueue(ch, "hello")
-		failOnError(err, "Failed to declare a queue")
+		initmq.FailOnError(err, "Failed to declare a queue")
 
-		err = ch.Publish(
-			"",     // exchange
-			q.Name, // routing key
-			false,  // mandatory
-			false,  // immediate
-			amqp.Publishing{
-				ContentType: "text/plain",
-				Body:        []byte(form.Message),
-			})
+		if r.Method == http.MethodPost {
+			err = ch.Publish(
+				"",     // exchange
+				q.Name, // routing key
+				false,  // mandatory
+				false,  // immediate
+				amqp.Publishing{
+					ContentType: "text/plain",
+					Body:        []byte(form.Message),
+				})
 
-		failOnError(err, "Failed to publish a message")
-		log.Printf(" [x] Sent %s\n", form.Message)
+			initmq.FailOnError(err, "Failed to publish a message")
+			log.Printf(" [x] Sent %s\n", form.Message)
+
+			form.Sent = true
+		}
 	})
 
 	http.FileServer(http.FS(embedTemplates))

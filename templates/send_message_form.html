@@ -5,8 +5,8 @@
     <title>Send message form</title>
 </head>
 <body>
-    {{if .Success}}
-        <h1>Message was sent to into queue.</h1>
+    {{if .Sent}}
+        <h1>Message was sent into queue.</h1>
     {{else}}
         <h5>Send message into queue:</h5>
         <form method="POST">
