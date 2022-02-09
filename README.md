@@ -34,6 +34,6 @@ echo 127.0.0.1 go-queue-service.local >> /etc/hosts
 kubectl create secret tls go-queue-service-secret-tls --key .ops/certs/localhost.key --cert .ops/certs/localhost.crt --namespace=go-ns
 ```
 
-To start debug process do next run commands:
+To start debug process in GoLand do next run commands:
 1. Run `skaffold debug`
 2. Debug `debug`
