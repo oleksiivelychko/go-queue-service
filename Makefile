@@ -17,10 +17,12 @@ get-ingress:
 	kubectl get ingress --all-namespaces
 
 build-and-push-docker:
-	docker buildx build --platform linux/amd64 --tag alexvelychko/goqueueservice -f .ops/docker/Dockerfile . && docker push alexvelychko/goqueueservice
+	docker buildx build --platform linux/amd64 --tag alexvelychko/goqueueservice -f .ops/docker/Dockerfile .
+	docker push alexvelychko/goqueueservice
 
-re-create-ns:
-	kubectl delete ns go-ns && kubectl create namespace go-ns
+init-ns:
+	kubectl delete ns go-ns
+	kubectl create namespace go-ns
 
 kube-contexts:
 	kubectl config get-contexts
