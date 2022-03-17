@@ -1,4 +1,7 @@
-deploy-ingress:
+helm-update:
+	helm repo update
+
+deploy-ingress: helm-update
 	helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 
 delete-ingress:
@@ -12,9 +15,6 @@ build-and-push-docker:
 
 re-create-ns:
 	kubectl delete ns go-ns && kubectl create namespace go-ns
-
-helm-update:
-	helm repo update
 
 kube-contexts:
 	kubectl config get-contexts
