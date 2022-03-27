@@ -47,3 +47,9 @@ delete-secret:
 
 kube-secrets:
 	kubectl get secrets
+
+skaffold-debug:
+	skaffold debug --auto-build --auto-deploy --auto-sync --no-prune=false --cache-artifacts=false --verbosity info -f .ops/skaffold.yaml
+
+skaffold-watch:
+	skaffold dev --no-prune=false --cache-artifacts=false --verbosity error -f .ops/skaffold.yaml
