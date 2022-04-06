@@ -13,6 +13,9 @@ delete-ingress:
 deploy-metrics:
 	kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
+delete-metrics:
+	kubectl delete -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
 get-ingress:
 	kubectl get ingress --all-namespaces
 
