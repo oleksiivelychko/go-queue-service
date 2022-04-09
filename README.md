@@ -2,13 +2,6 @@
 
 ### Local development environment is running on Kubernetes and handles working service with queue.
 
-📌 Install development tools:
-```
-brew install skaffold
-brew install helm
-brew install k9s
-```
-
 📌 Generate certificate:
 ```
 openssl req -x509 -days 365 -out .ops/certs/localhost.crt -keyout .ops/certs/localhost.key \
