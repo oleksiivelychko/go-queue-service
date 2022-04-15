@@ -4,6 +4,9 @@ helm-update:
 deploy-ingress: helm-update
 	helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 
+purge-ingress:
+	kubectl delete all --all -n ingress-nginx
+
 delete-ingress:
 	kubectl delete ingress -n default go-queue-ingress
 
