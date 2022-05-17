@@ -10,11 +10,11 @@ purge-ingress:
 delete-ingress:
 	kubectl delete ingress -n default go-queue-ingress
 
+metrics_server := https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 deploy-metrics:
-	kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-
+	kubectl apply -f $(metrics_server)
 delete-metrics:
-	kubectl delete -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+	kubectl delete -f $(metrics_server)
 
 get-ingress:
 	kubectl get ingress --all-namespaces
