@@ -29,7 +29,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.9.11-debian-10-r28
+  tag: 3.8.19-debian-10-r0
 
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -100,12 +100,12 @@ auth:
   ## @param auth.username RabbitMQ application username
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
-  username: user
+  username: rabbit
 
   ## @param auth.password RabbitMQ application password
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
-  password: ""
+  password: secret
   ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)
   ## e.g:
   ## existingPasswordSecret: name-of-existing-secret
