@@ -4,12 +4,12 @@ FROM golang:1.18-alpine as builder
 # It is disabled by default when cross-compiling.
 ENV CGO_ENABLED 0
 
-WORKDIR /built
-COPY . /built
+WORKDIR /build
+COPY . /build
 
 # `skaffold debug` sets SKAFFOLD_GO_GCFLAGS to disable compiler optimizations
 ARG SKAFFOLD_GO_GCFLAGS
-RUN go build -gcflags="${SKAFFOLD_GO_GCFLAGS}" -o /built/app main.go
+RUN go build -gcflags="${SKAFFOLD_GO_GCFLAGS}" -o /build/app main.go
 
 FROM alpine:3
 
@@ -17,7 +17,7 @@ FROM alpine:3
 # for `skaffold debug` (https://skaffold.dev/docs/workflows/debug/).
 ENV GOTRACEBACK=single
 
-WORKDIR /built
-COPY --from=builder /built/app .
+WORKDIR /build
+COPY --from=builder /build/app .
 
 CMD ["./app"]
