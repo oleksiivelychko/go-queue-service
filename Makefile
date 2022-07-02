@@ -57,6 +57,7 @@ kube-use-default:
 	kubectl config use-context docker-desktop
 
 skaffold-debug:
+	$(info 'https://github.com/GoogleContainerTools/skaffold/issues/7582')
 	skaffold debug --auto-build --auto-deploy --auto-sync --no-prune=false --cache-artifacts=false --verbosity info -f .ops/skaffold.yaml
 
 skaffold-watch:

@@ -11,7 +11,3 @@ openssl req -x509 -days 365 -out .ops/certs/localhost.crt -keyout .ops/certs/loc
 
 echo 127.0.0.1 go-queue-service.local >> /etc/hosts
 ```
-
-📌 To debug in GoLand do it:
-1. Run `skaffold debug`
-2. Click `debug`
