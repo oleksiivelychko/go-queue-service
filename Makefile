@@ -8,12 +8,8 @@ download-metrics:
 	curl -Lo $(metrics_server_yaml) $(metrics_server)
 apply-metrics:
 	kubectl apply -f $(metrics_server_yaml)
-remove-metrics:
-	kubectl delete -f $(metrics_server_yaml)
-deploy-metrics:
-	kubectl apply -f $(metrics_server)
 delete-metrics:
-	kubectl delete -f $(metrics_server)
+	kubectl delete -f $(metrics_server_yaml)
 
 install-skaffold:
 	sudo -S rm -f /usr/local/bin/skaffold
