@@ -1,6 +1,14 @@
 deploy-ingress:
 	helm repo update
-	helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+	helm upgrade \
+		--install ingress-nginx ingress-nginx \
+		--repo https://kubernetes.github.io/ingress-nginx \
+		--namespace ingress-nginx \
+		--create-namespace \
+		--set controller.hostPort.enabled=true \
+		--cleanup-on-fail \
+		--verify \
+		--wait
 
 metrics_server := https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 metrics_server_yaml := .ops/k8s-apps/metrics-server.yaml
@@ -41,3 +49,8 @@ skaffold-debug:
 
 skaffold-watch:
 	skaffold dev --no-prune=false --cache-artifacts=false --verbosity error -f .ops/skaffold.yaml
+
+test:
+	ls -l | \
+	grep README && \
+	echo "hello"
