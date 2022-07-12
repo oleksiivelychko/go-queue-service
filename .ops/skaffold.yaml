@@ -5,7 +5,6 @@ metadata:
   name: ops
 
 build:
-  platforms: ["linux/amd64"]
   tagPolicy:
     sha256: {}
   artifacts:

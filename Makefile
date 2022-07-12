@@ -26,12 +26,16 @@ install-skaffold:
 	rm skaffold
 	skaffold version
 
-kube-init-ns:
+kube-delete-ns:
 	kubectl delete ns go-ns
+
+kube-init-ns:
 	kubectl create namespace go-ns
 
-kube-init-secret:
+kube-delete-secret:
 	kubectl delete secret go-queue-service-secret-tls
+
+kube-init-secret:
 	kubectl create secret tls go-queue-service-secret-tls --key .ops/certs/localhost.key --cert .ops/certs/localhost.crt --namespace=go-ns
 
 kube-delete-ingress:
@@ -44,13 +48,15 @@ kube-purge-ingress:
 	kubectl delete all --all -n ingress-nginx
 
 skaffold-debug:
-	$(info 'https://github.com/GoogleContainerTools/skaffold/issues/7582')
-	skaffold debug --auto-build --auto-deploy --auto-sync --no-prune=false --cache-artifacts=false --verbosity info -f .ops/skaffold.yaml
+	skaffold debug \
+		--auto-build \
+		--auto-deploy \
+		--auto-sync \
+		--verbosity info \
+		--no-prune=false \
+		--cache-artifacts=false \
+		-f .ops/skaffold.yaml
 
 skaffold-watch:
 	skaffold dev --no-prune=false --cache-artifacts=false --verbosity error -f .ops/skaffold.yaml
 
-test:
-	ls -l | \
-	grep README && \
-	echo "hello"
