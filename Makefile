@@ -14,6 +14,13 @@ deploy-metrics:
 delete-metrics:
 	kubectl delete -f $(metrics_server)
 
+install-skaffold:
+	sudo -S rm -f /usr/local/bin/skaffold
+	curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-darwin-arm64 && \
+    sudo -S install skaffold /usr/local/bin/
+	rm skaffold
+	skaffold version
+
 kube-contexts:
 	kubectl config get-contexts
 
