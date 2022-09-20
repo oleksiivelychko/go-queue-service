@@ -7,8 +7,7 @@ deploy-ingress:
 		--create-namespace \
 		--set controller.hostPort.enabled=true \
 		--wait \
-		--cleanup-on-fail \
-        --verify
+		--cleanup-on-fail
 
 metrics_server := https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 metrics_server_yaml := .ops/k8s-apps/metrics-server.yaml
