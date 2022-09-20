@@ -24,11 +24,17 @@ install-skaffold:
 kube-contexts:
 	kubectl config get-contexts
 
+kube-create-ns:
+	kubectl create namespace go-ns
+
 kube-create-secret:
 	kubectl create secret tls go-queue-service-secret-tls --key .ops/certs/localhost.key --cert .ops/certs/localhost.crt --namespace=go-ns
 
 kube-delete-ingress:
 	kubectl delete ingress -n default go-queue-ingress
+
+kube-delete-ns:
+	kubectl delete ns go-ns
 
 kube-delete-secret:
 	kubectl delete secret go-queue-service-secret-tls
@@ -38,10 +44,6 @@ kube-deployments:
 
 kube-get-ingress:
 	kubectl get ingress --all-namespaces
-
-kube-init-ns:
-	kubectl delete ns go-ns
-	kubectl create namespace go-ns
 
 kube-pods:
 	kubectl get pods -o wide --all-namespaces
