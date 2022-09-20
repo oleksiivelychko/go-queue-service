@@ -11,3 +11,7 @@ openssl req -x509 -days 365 -out .ops/certs/localhost.crt -keyout .ops/certs/loc
 
 echo 127.0.0.1 go-queue-service.local >> /etc/hosts
 ```
+
+📌 To show all available logs in **k9s**: set `k9s.logger.sinceSeconds` to `-1` (use `k9s info` to find config location).
+
+
