@@ -6,11 +6,11 @@ ENV CGO_ENABLED 0
 # Allow Go to retreive the dependencies for the build step.
 RUN apk add --no-cache git
 
-WORKDIR /
-COPY src/* /
+WORKDIR /build
+COPY . /build
 
 # Disable compiler optimizations.
-RUN go build -gcflags="all=-N -l" -o /app .
+RUN go build -gcflags="all=-N -l" -o /build/app main.go
 
 # Get Delve from a GOPATH not from a Go Modules project.
 WORKDIR /go/src/
@@ -21,8 +21,8 @@ FROM alpine:3
 # Mark this container as using the Go language runtime.
 ENV GOTRACEBACK=all
 
-WORKDIR /
-COPY --from=builder /app /
+WORKDIR /build
+COPY --from=builder /build/app /
 COPY --from=builder /go/bin/dlv /
 
 EXPOSE 8080 56268
