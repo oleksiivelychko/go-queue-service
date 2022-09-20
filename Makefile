@@ -1,10 +1,6 @@
 helm-update:
 	helm repo update
 
-docker-build-and-push:
-	docker buildx build --platform linux/amd64 --tag oleksiivelychko/goqueueservice -f .ops/docker/Dockerfile .
-	docker push oleksiivelychko/goqueueservice
-
 deploy-ingress: helm-update
 	helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 
