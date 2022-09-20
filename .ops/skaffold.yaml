@@ -5,6 +5,7 @@ metadata:
   name: ops
 
 build:
+  platforms: ["linux/amd64"]
   artifacts:
     - image: go-queue
       docker:
