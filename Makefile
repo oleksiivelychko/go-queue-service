@@ -1,10 +1,15 @@
-helm-update:
+deploy-ingress:
 	helm repo update
-
-deploy-ingress: helm-update
 	helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 
 metrics_server := https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+metrics_server_yaml := .ops/k8s-apps/metrics-server.yaml
+download-metrics:
+	curl -Lo $(metrics_server_yaml) $(metrics_server)
+apply-metrics:
+	kubectl apply -f $(metrics_server_yaml)
+remove-metrics:
+	kubectl delete -f $(metrics_server_yaml)
 deploy-metrics:
 	kubectl apply -f $(metrics_server)
 delete-metrics:
