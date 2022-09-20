@@ -5,7 +5,6 @@ metadata:
   namespace: go-ns
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
@@ -20,15 +19,15 @@ spec:
   - host: go-queue-service.local
     http:
       paths:
-      - path: /(.*)
-        pathType: Prefix
+      - path: /
+        pathType: ImplementationSpecific
         backend:
           service:
             name: go-queue-app
             port:
               number: 8080
-      - path: /rmq/(.*)
-        pathType: Prefix
+      - path: /rabbitmq
+        pathType: ImplementationSpecific
         backend:
           service:
             name: rabbitmq
