@@ -13,7 +13,7 @@ func LoadEnv(mqHost string) {
 	_ = os.Setenv("MQ_HOST", mqHost)
 	_ = os.Setenv("MQ_PORT", "5672")
 	_ = os.Setenv("MQ_USER", "rabbit")
-	_ = os.Setenv("MQ_PASS", "rabbit")
+	_ = os.Setenv("MQ_PASS", "secret")
 }
 
 func MQ() (*amqp.Connection, error) {
