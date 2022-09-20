@@ -6,6 +6,8 @@ metadata:
 
 build:
   platforms: ["linux/amd64"]
+  tagPolicy:
+    sha256: {}
   artifacts:
     - image: local/goqueueapp
       docker:

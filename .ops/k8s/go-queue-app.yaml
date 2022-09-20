@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: go-queue-app
-        image: local/goqueueapp
+        image: local/goqueueapp:latest
         ports:
         - containerPort: 8080
         resources:
