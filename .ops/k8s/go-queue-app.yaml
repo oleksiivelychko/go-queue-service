@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: go-queue-app
-  namespace: go-ns
+  namespace: go-queue-service
 spec:
   replicas: 1
   selector:
@@ -27,7 +27,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: go-queue-app
-  namespace: go-ns
+  namespace: go-queue-service
   labels:
     run: go-queue-app
 spec:

@@ -20,7 +20,7 @@ deploy:
       version: 8.24.13
       valuesFiles:
         - .ops/helm/values/rabbitmq.yaml
-      namespace: go-ns
+      namespace: go-queue-service
   kubectl:
     manifests:
     - .ops/k8s/*.yaml
@@ -28,6 +28,6 @@ deploy:
 portForward:
   - resourceType: service
     resourceName: rabbitmq
-    namespace: go-ns
+    namespace: go-queue-service
     port: 5672
     localPort: 5672
