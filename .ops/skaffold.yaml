@@ -8,7 +8,7 @@ build:
   tagPolicy:
     sha256: {}
   artifacts:
-    - image: local/goqueueapp
+    - image: local/goqueueservice
       docker:
         dockerfile: .ops/docker/Dockerfile
 
@@ -20,7 +20,7 @@ deploy:
       version: 8.24.13
       valuesFiles:
         - .ops/helm/values/rabbitmq.yaml
-      namespace: go-queue-service
+      namespace: gons
   kubectl:
     manifests:
     - .ops/k8s/*.yaml
@@ -28,6 +28,6 @@ deploy:
 portForward:
   - resourceType: service
     resourceName: rabbitmq
-    namespace: go-queue-service
+    namespace: gons
     port: 5672
     localPort: 5672
