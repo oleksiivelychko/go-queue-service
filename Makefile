@@ -25,17 +25,16 @@ install-skaffold:
 	rm skaffold
 	skaffold version
 
-delete-secret:
-	kubectl delete secret go-queue-service-secret-tls
-create-secret: delete-secret
+create-secret:
 	kubectl create secret tls go-queue-service-secret-tls \
 		--key .ops/certs/localhost.key \
 		--cert .ops/certs/localhost.crt \
-		--namespace=go-queue-service
+		--namespace=gons
+
+delete-secret:
+	kubectl delete secret go-queue-service-secret-tls -n gons
 
 delete-ingress:
-	kubectl delete ingress -n default go-queue-ingress
-delete-ingress-completely:
 	kubectl delete all --all -n ingress-nginx
 
 skaffold-debug:
