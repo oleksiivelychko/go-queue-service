@@ -2,6 +2,7 @@
 .ops
 .run
 .gitignore
+LICENSE
 Makefile
 README.md
 
