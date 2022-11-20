@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta29
+apiVersion: skaffold/v3
 kind: Config
 
 metadata:
@@ -12,6 +12,10 @@ build:
       docker:
         dockerfile: .ops/docker/Dockerfile
 
+manifests:
+  rawYaml:
+    - .ops/k8s/*.yaml
+
 deploy:
   helm:
     releases:
@@ -21,9 +25,7 @@ deploy:
       valuesFiles:
         - .ops/helm/values/rabbitmq.yaml
       namespace: gons
-  kubectl:
-    manifests:
-    - .ops/k8s/*.yaml
+  kubectl: {}
 
 portForward:
   - resourceType: service
