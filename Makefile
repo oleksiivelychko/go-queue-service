@@ -18,12 +18,22 @@ apply-metrics:
 delete-metrics:
 	kubectl delete -f $(metrics_server_yaml)
 
+skaffoldVer := 1.39.4
 install-skaffold:
-	sudo -S rm -f /usr/local/bin/skaffold
-	curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-darwin-arm64 && \
-    sudo -S install skaffold /usr/local/bin/
-	rm skaffold
-	skaffold version
+	@if [ ${skaffoldVer} = "latest" ]; then\
+        echo "trying to install skaffold latest version...";\
+		sudo -S rm -f /usr/local/bin/skaffold;\
+    	curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-darwin-arm64 && \
+        sudo -S install skaffold /usr/local/bin/;\
+        rm skaffold;\
+    else\
+        echo "trying to install skaffold ${skaffoldVer} version...";\
+        sudo -S rm -f /usr/local/bin/skaffold;\
+    	curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v${skaffoldVer}/skaffold-darwin-arm64 && \
+    	chmod +x skaffold && \
+    	sudo -S mv skaffold /usr/local/bin;\
+    fi;\
+    skaffold version
 
 create-secret:
 	kubectl create secret tls go-queue-service-secret-tls \
