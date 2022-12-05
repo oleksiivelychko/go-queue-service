@@ -18,6 +18,13 @@ apply-metrics:
 delete-metrics:
 	kubectl delete -f $(metrics_server_yaml)
 
+pre-install-go:
+	sudo -S rm -rf /usr/local/go
+	sudo -S rm /etc/paths.d/go
+	$(eval VERSION=$(shell curl -s "https://go.dev/dl/?mode=json" | jq -r '.[0].version'))
+	@echo "going to download ${VERSION} installer...";
+	wget https://go.dev/dl/${VERSION}.darwin-arm64.pkg
+
 skaffoldVer := 1.39.4
 install-skaffold:
 	@if [ ${skaffoldVer} = "latest" ]; then\
