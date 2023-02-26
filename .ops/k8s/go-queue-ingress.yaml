@@ -26,8 +26,8 @@ spec:
             name: go-queue-service-svc
             port:
               number: 8080
-      - path: /rabbitmq
-        pathType: ImplementationSpecific
+      - path: /rabbitmq/
+        pathType: Prefix
         backend:
           service:
             name: rabbitmq
