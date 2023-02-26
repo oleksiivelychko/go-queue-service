@@ -1,3 +1,3 @@
 .idea
-.ops/certs/*
+.ops/certs/localhost.*
 .kpt-pipeline
