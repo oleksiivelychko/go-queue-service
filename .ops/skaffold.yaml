@@ -21,7 +21,7 @@ deploy:
     releases:
     - name: rabbitmq
       remoteChart: bitnami/rabbitmq
-      version: 8.24.13
+      version: 11.10.0
       valuesFiles:
         - .ops/helm/values/rabbitmq.yaml
       namespace: gons
