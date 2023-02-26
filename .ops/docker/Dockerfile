@@ -1,4 +1,4 @@
-FROM golang:1.20-alpine as builder
+FROM golang:1.19-alpine as builder
 
 # The cgo tool is enabled by default for native builds on systems where it is expected to work.
 # It is disabled by default when cross-compiling.
