@@ -2,7 +2,8 @@
 
 ### Local Kubernetes development environment is running on Skaffold and handles queue service.
 
-📌 Use <a href="https://raw.githubusercontent.com/oleksiivelychko/laravel-starter-kit/main/.docker/shell/generate-certs.sh">generate-certs.sh</a> to generate certificate:
+📌 Use [generate-certs.sh](https://raw.githubusercontent.com/oleksiivelychko/laravel-starter-kit/main/.docker/shell/generate-certs.sh) to generate certificate:
+
 ```
 ./generate-certs go-queue-service.local
 ```
