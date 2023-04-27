@@ -1,4 +1,4 @@
-deploy-ingress:
+deploy-ingress: delete-secret
 	helm repo update
 	helm upgrade \
 		--install ingress-nginx ingress-nginx \
@@ -16,7 +16,7 @@ metrics_server := https://github.com/kubernetes-sigs/metrics-server/releases/lat
 metrics_server_yaml := .ops/k8s-apps/metrics-server.yaml
 download-metrics:
 	curl -Lo $(metrics_server_yaml) $(metrics_server)
-apply-metrics:
+apply-metrics: delete-metrics
 	kubectl apply -f $(metrics_server_yaml)
 delete-metrics:
 	kubectl delete -f $(metrics_server_yaml)
@@ -47,7 +47,7 @@ install-skaffold:
     fi;\
     skaffold version
 
-create-secret:
+create-secret: delete-secret
 	kubectl create secret tls go-queue-service-secret-tls \
 		--key .ops/certs/localhost.key \
 		--cert .ops/certs/localhost.crt \
