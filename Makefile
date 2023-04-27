@@ -9,6 +9,9 @@ deploy-ingress:
 		--wait \
 		--cleanup-on-fail
 
+delete-ingress:
+	kubectl delete all --all -n ingress-nginx
+
 metrics_server := https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 metrics_server_yaml := .ops/k8s-apps/metrics-server.yaml
 download-metrics:
@@ -53,9 +56,6 @@ create-secret:
 delete-secret:
 	kubectl delete secret go-queue-service-secret-tls -n gons
 
-delete-ingress:
-	kubectl delete all --all -n ingress-nginx
-
 skaffold-debug:
 	skaffold debug \
 		--auto-build \
@@ -66,6 +66,5 @@ skaffold-debug:
 		--cache-artifacts=false \
 		-f .ops/skaffold.yaml
 
-skaffold-watch:
+skaffold-dev:
 	skaffold dev --no-prune=false --cache-artifacts=false --verbosity error -f .ops/skaffold.yaml
-
