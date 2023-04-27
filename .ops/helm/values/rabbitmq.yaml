@@ -31,7 +31,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.9
+  tag: 3.11.13
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -128,11 +128,11 @@ auth:
   ## @param auth.username RabbitMQ application username
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
-  username: user
+  username: admin
   ## @param auth.password RabbitMQ application password
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
-  password: ""
+  password: secret
   ## @param auth.securePassword Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions and 'true' when not setting the auth.password parameter.
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
@@ -387,6 +387,9 @@ configuration: |-
   cluster_formation.node_cleanup.only_log_warning = true
   cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
   {{- end }}
+  {{ if and .Values.clustering.enabled .Values.loadDefinition.enabled }}
+  cluster_formation.target_cluster_size_hint = {{ .Values.replicaCount }}
+  {{ end }}
   {{- if .Values.loadDefinition.enabled }}
   load_definitions = {{ .Values.loadDefinition.file }}
   {{- end }}
@@ -661,6 +664,10 @@ updateStrategy:
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 statefulsetLabels: {}
+## @param statefulsetAnnotations RabbitMQ statefulset annotations. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+statefulsetAnnotations: {}
 ## @param priorityClassName Name of the priority class to be used by RabbitMQ pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
@@ -935,6 +942,11 @@ persistence:
   ##   example.io/disk-volume-type: SSD
   ##
   annotations: {}
+  ## @param persistence.labels Persistence labels. Evaluated as a template
+  ## Example:
+  ## labels:
+  ##   app: my-app
+  labels: {}
 
 ## @section Exposure parameters
 ##
@@ -1044,12 +1056,19 @@ service:
   ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
   ##
   annotations: {}
+  ## DEPRECATED service.annotationsHeadless it will removed in a future release, please use service.headless.annotations instead
   ## @param service.annotationsHeadless Headless Service annotations. Evaluated as a template
   ## Example:
   ## annotations:
   ##   external-dns.alpha.kubernetes.io/internal-hostname: rabbitmq.example.com
   ##
   annotationsHeadless: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
   ## If "ClientIP", consecutive client requests will be directed to the same Pod
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
@@ -1363,7 +1382,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r102
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
