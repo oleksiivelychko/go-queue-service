@@ -2,7 +2,7 @@ package main
 
 import (
 	"embed"
-	"github.com/oleksiivelychko/go-queue-service/initmq"
+	"github.com/oleksiivelychko/go-queue-service/mq"
 	"github.com/streadway/amqp"
 	"html/template"
 	"io"
@@ -24,62 +24,64 @@ type Form struct {
 }
 
 func main() {
-	initmq.LoadEnv("rabbitmq")
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = io.WriteString(w, "It's Skaffold!\n")
+	http.HandleFunc("/", func(resp http.ResponseWriter, req *http.Request) {
+		_, _ = io.WriteString(resp, "It's Skaffold!\n")
 	})
 
-	http.HandleFunc("/queue/", func(w http.ResponseWriter, r *http.Request) {
-		page, ok := pages[r.URL.Path]
+	http.HandleFunc("/queue/", func(resp http.ResponseWriter, req *http.Request) {
+		page, ok := pages[req.URL.Path]
 		if !ok {
-			log.Printf("URL path %s not found", r.URL.Path)
-			w.WriteHeader(http.StatusNotFound)
+			log.Printf("URL path %s not found", req.URL.Path)
+			resp.WriteHeader(http.StatusNotFound)
 			return
 		}
 
 		tpl, err := template.ParseFS(embedTemplates, page)
 		if err != nil {
-			log.Printf("page %s not found", r.RequestURI)
-			w.WriteHeader(http.StatusInternalServerError)
+			log.Printf("page %s not found", req.RequestURI)
+			resp.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		w.Header().Set("Content-Type", "text/html")
-		w.WriteHeader(http.StatusOK)
+		resp.Header().Set("Content-Type", "text/html")
+		resp.WriteHeader(http.StatusOK)
 
 		form := Form{
-			Message: r.FormValue("message"),
+			Message: req.FormValue("message"),
 			Sent:    false,
 		}
 
-		if err = tpl.Execute(w, form); err != nil {
+		if err = tpl.Execute(resp, form); err != nil {
 			return
 		}
 
-		conn, err := initmq.MQ()
-		initmq.FailOnError(err, "Failed to connect to RabbitMQ")
-		defer conn.Close()
+		conn, err := mq.New()
+		mq.FailOnError(err)
+		defer func(conn *amqp.Connection) {
+			_ = conn.Close()
+		}(conn)
 
 		ch, err := conn.Channel()
-		initmq.FailOnError(err, "Failed to open a channel")
-		defer ch.Close()
+		mq.FailOnError(err)
+		defer func(ch *amqp.Channel) {
+			_ = ch.Close()
+		}(ch)
 
-		q, err := initmq.MakeQueue(ch, "hello")
-		initmq.FailOnError(err, "Failed to declare a queue")
+		queue, err := mq.Queue(ch, "hello")
+		mq.FailOnError(err)
 
-		if r.Method == http.MethodPost {
+		if req.Method == http.MethodPost {
 			err = ch.Publish(
-				"",     // exchange
-				q.Name, // routing key
-				false,  // mandatory
-				false,  // immediate
+				"",         // exchange
+				queue.Name, // routing key
+				false,      // mandatory
+				false,      // immediate
 				amqp.Publishing{
 					ContentType: "text/plain",
 					Body:        []byte(form.Message),
 				})
 
-			initmq.FailOnError(err, "Failed to publish a message")
+			mq.FailOnError(err)
 			log.Printf(" [x] Sent %s\n", form.Message)
 
 			form.Sent = true
