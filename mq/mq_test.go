@@ -25,4 +25,9 @@ func TestMQ(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	_, err = ch.QueueDelete("test", false, false, false)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
