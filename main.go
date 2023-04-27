@@ -67,7 +67,7 @@ func main() {
 			_ = ch.Close()
 		}(ch)
 
-		queue, err := mq.Queue(ch, "hello")
+		queue, err := mq.Queue(ch, "go-queue")
 		mq.FailOnError(err)
 
 		if req.Method == http.MethodPost {
@@ -82,7 +82,7 @@ func main() {
 				})
 
 			mq.FailOnError(err)
-			log.Printf(" [x] Sent %s\n", form.Message)
+			log.Printf(" [x] Sent: %s\n", form.Message)
 
 			form.Sent = true
 		}
