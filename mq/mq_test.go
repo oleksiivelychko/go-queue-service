@@ -8,7 +8,7 @@ import (
 func TestMQ(t *testing.T) {
 	_ = os.Setenv("MQ_HOST", "go-queue-service.local")
 	_ = os.Setenv("MQ_PORT", "5672")
-	_ = os.Setenv("MQ_USER", "admin")
+	_ = os.Setenv("MQ_USER", "rabbit")
 	_ = os.Setenv("MQ_PASS", "secret")
 
 	conn, err := New()
