@@ -7,7 +7,7 @@
 ./generate-certs.sh go-queue-service.local
 ```
 
-📌 Delete previous PVC:
+📌 Delete obsolete PVC:
 ```
 kubectl get pvc -n gons
 kubectl delete pvc data-rabbitmq-0 -n gons
