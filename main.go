@@ -1,13 +1,15 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"github.com/oleksiivelychko/go-queue-service/mq"
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"html/template"
 	"io"
 	"log"
 	"net/http"
+	"time"
 )
 
 var (
@@ -70,12 +72,11 @@ func main() {
 		queue, err := mq.Queue(ch, "go-queue")
 		mq.FailOnError(err)
 
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+
 		if req.Method == http.MethodPost {
-			err = ch.Publish(
-				"",         // exchange
-				queue.Name, // routing key
-				false,      // mandatory
-				false,      // immediate
+			err = ch.PublishWithContext(ctx, "", queue.Name, false, false,
 				amqp.Publishing{
 					ContentType: "text/plain",
 					Body:        []byte(form.Message),
