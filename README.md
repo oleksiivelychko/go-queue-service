@@ -17,7 +17,7 @@ kubectl delete pvc data-rabbitmq-0 -n gons
 - make `skaffold-debug`
 - run `debug` configuration in GoLand
 - add breakpoints
-- visit `go-queue-service.local/queue`
+- visit https://go-queue-service.local/queue
 
 💡 To obtain RabbitMQ password:
 ```
