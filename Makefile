@@ -1,4 +1,4 @@
-deploy-ingress: delete-secret
+deploy-ingress:
 	helm repo update
 	helm upgrade \
 		--install ingress-nginx ingress-nginx \
@@ -16,7 +16,7 @@ metrics_server := https://github.com/kubernetes-sigs/metrics-server/releases/lat
 metrics_server_yaml := .ops/k8s-apps/metrics-server.yaml
 download-metrics:
 	curl -Lo $(metrics_server_yaml) $(metrics_server)
-apply-metrics: delete-metrics
+apply-metrics:
 	kubectl apply -f $(metrics_server_yaml)
 delete-metrics:
 	kubectl delete -f $(metrics_server_yaml)
@@ -30,7 +30,7 @@ install-go:
 	sudo -S installer -pkg ${VERSION}.darwin-arm64.pkg -target /
 	go version
 
-skaffoldVer := 1.39.4
+skaffoldVer := latest
 install-skaffold:
 	@if [ ${skaffoldVer} = "latest" ]; then\
         echo "trying to install skaffold latest version...";\
