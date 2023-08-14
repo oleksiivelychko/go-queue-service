@@ -28,7 +28,8 @@ install-go:
 	@echo "going to download ${VERSION} installer...";
 	wget https://go.dev/dl/${VERSION}.darwin-arm64.pkg
 	sudo -S installer -pkg ${VERSION}.darwin-arm64.pkg -target /
-	go version
+	rm ${VERSION}.darwin-arm64.pkg
+	@go version
 
 skaffoldVer := latest
 install-skaffold:
